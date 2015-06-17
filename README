@@ -1,2 +1,5 @@
 A simple client/server whiteboard app using WebSockets.
 Run the server, connect through your browser.
+
+Licensed under the Unlicense, see <LICENSE> and <http://unlicense.org/>.
+Uses <https://github.com/dpallot/simple-websocket-server>.
