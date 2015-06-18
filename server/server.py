@@ -1,7 +1,7 @@
 # Whiteboard server.py
 
 import signal, sys
-from SimpleWebSocketServer import WebSocket, SimpleWebSocketServer, SimpleSSLWebSocketServer
+from SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
 
 HOSTNAME = "localhost"
 PORT = 16180
