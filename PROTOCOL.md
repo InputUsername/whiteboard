@@ -1,5 +1,7 @@
 ## Protocol kind of thing
 
+Whiteboard size: 1280 x 720
+
 ### client -> server
 
 | message | effect |
