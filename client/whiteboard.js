@@ -1,9 +1,15 @@
 // Canvas stuff
+var $canvas = document.getElementById("canvas");
+
+if (!$canvas.getContext || !window.WebSocket) {
+  var body = document.getElementsByTagName("body");
+  body[0].innerHTML = "<p>Oops! Your browser doesn't support canvas or WebSockets!</p>";
+}
+
+var ctx = $canvas.getContext('2d');
+
 var CW = 1280;
 var CH = 720;
-
-var $canvas = document.getElementById("canvas");
-var ctx = $canvas.getContext('2d');
 
 $canvas.width = CW;
 $canvas.height = CW;
@@ -27,11 +33,12 @@ var setupSocket = function(url) {
     $connection.style.display = "none";
     
     //debug
+    alert("sending 'ping!'");
     socket.send("ping!");
   }
   
   socket.onmessage = function(data) {
-    alert('data');
+    alert("Got data: " + data);
   }
   
   socket.onclose = function() {
