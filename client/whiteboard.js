@@ -54,6 +54,6 @@ $connect.addEventListener("click", function() {
   var port = $port.value;
   
   if (host != "" && port != "") {
-    setupSocket(host + ":" + port);
+    setupSocket("ws://" + host + ":" + port);
   }
 }, false);
