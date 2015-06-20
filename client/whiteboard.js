@@ -27,7 +27,7 @@ var $connect = document.getElementById("connect");
 var socket = null;
 
 var setupSocket = function(url) {
-  socket = new WebSocket(url, "whiteboard");
+  socket = new WebSocket(url);
   
   socket.onopen = function() {
     ctx.clearRect(0, 0, $canvas.width, $canvas.height);
