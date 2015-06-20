@@ -8,15 +8,17 @@
 	<link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
-	<div id="connection">
-		<input id="host" type="text" value="" placeholder="Hostname" />
-		<span>:</span>
-		<input id="port" type="text" value="16180" placeholder="Port" />
-		<input id="connect" type="button" value="Connect" />
+	<div id="wrapper">
+		<div id="connection">
+			<input id="host" type="text" value="localhost" placeholder="Hostname" />
+			<span>:</span>
+			<input id="port" type="text" value="16180" placeholder="Port" />
+			<input id="connect" type="button" value="Connect" />
+		</div>
+
+		<canvas id="canvas"></canvas>
+
+		<script src="whiteboard.js"></script>
 	</div>
-
-	<canvas id="canvas"></canvas>
-
-	<script src="whiteboard.js"></script>
 </body>
 </html>
