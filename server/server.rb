@@ -1,12 +1,12 @@
 require_relative 'web_socket.rb'
 
-if ARGV.size != 2 then
-	abort "Usage: #{__FILE__} <domain> <port>"
+if ARGV.size < 1 then
+	abort 'Usage: #{__FILE__} <port>'
 end
 
 server = WebSocketServer.new(
-	:accepted_domains => [ARGV[0]],
-	:port => ARGV[1].to_i
+	:accepted_domains => ["*"],
+	:port => ARGV[0].to_i
 )
 
 server.run do |ws|
