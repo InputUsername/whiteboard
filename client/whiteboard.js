@@ -16,6 +16,8 @@ $canvas.height = CW;
 
 ctx.clearRect(0, 0, $canvas.width, $canvas.height);
 
+$canvas.style.display = "none";
+
 // Connection stuff
 var $connection = document.getElementById("connection");
 var $host = document.getElementById("host");
@@ -30,6 +32,7 @@ var setupSocket = function(url) {
   socket.onopen = function() {
     ctx.clearRect(0, 0, $canvas.width, $canvas.height);
     
+    $canvas.style.display = "block-inline";
     $connection.style.display = "none";
     
     //debug
