@@ -25,6 +25,9 @@ var setupSocket = function(url) {
     ctx.clearRect(0, 0, $canvas.width, $canvas.height);
     
     $connection.style.display = "none";
+    
+    //debug
+    socket.send("ping!");
   }
   
   socket.onmessage = function(data) {
