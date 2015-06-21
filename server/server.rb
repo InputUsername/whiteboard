@@ -25,6 +25,8 @@ screen_data = []
 	end
 end
 
+clients = []
+
 server.run do |ws|
 
 	begin
@@ -33,10 +35,13 @@ server.run do |ws|
 
 		if ws.path == '/whiteboard' then
 			ws.handshake()
+			
+			clients << ws
 
 			while data = ws.receive()
-				#puts("Received '#{data}'")
-				#ws.send(data)
+				clients.each do |client|
+					client.send(data) unless client == ws
+				end
 			end
 		else
 			ws.handshake('404 not found')
