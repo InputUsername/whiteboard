@@ -10,5 +10,7 @@ Whiteboard size: 1280 x 720
 | `c` | Clear the screen |
 
 ### Colours
+| n | colour |
+|---|-------|
 | 0 | black |
 | 1 | white |
