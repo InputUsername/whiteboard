@@ -11,4 +11,5 @@ Whiteboard size: 1280 x 720
 
 #### Colours
 0: black
+
 1: white
