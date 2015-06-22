@@ -21,7 +21,7 @@ screen_data = []
 (0..SCREEN_H).each do |y|
 	screen_data << []
 	(0..SCREEN_W).each do |x|
-		screen_data[-1][x] = 0
+		screen_data[-1][x] = -1
 	end
 end
 
