@@ -71,6 +71,18 @@ $connect.addEventListener("click", function() {
         socket.onmessage = function(msg) {
             console.log("got message:");
             console.log(msg);
+            
+            var cmd = msg.data;
+            
+            if (cmd[0] == "p") {
+                
+            }
+            else if(cmd[0] == "l") {
+                
+            }
+            else if (cmd[0] == "c") {
+                clearCanvas();
+            }
         }
 
         socket.onerror = function(error) {
