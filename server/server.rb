@@ -1,10 +1,10 @@
-require_relative 'web_socket.rb'
+require_relative('web_socket.rb')
 
-if ARGV.size() < 1 then
-	abort 'Usage: #{__FILE__} <port>'
+if ARGV.size < 1 then
+	abort "Usage: #{__FILE__} <port>"
 end
 
-PORT = ARGV[0].to_i()
+PORT = ARGV[0].to_i
 
 server = WebSocketServer.new(:accepted_domains => ["*"], :port => PORT)
 
@@ -20,12 +20,12 @@ server.run do |ws|
 
 		if ws.path == '/whiteboard' then
 			ws.handshake()
-			
+
 			clients << ws
 
 			while data = ws.receive()
 				clients.each do |client|
-					client.send(data)
+					client.send(data) unless client.object_id() == ws.object_id()
 				end
 			end
 		else
@@ -33,11 +33,11 @@ server.run do |ws|
 		end
 
 	ensure
-		
+
 		clients.delete(ws)
-		
+
 		puts('Connection closed by client')
 
 	end
-	
+
 end
