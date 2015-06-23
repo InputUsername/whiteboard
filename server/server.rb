@@ -6,10 +6,7 @@ end
 
 PORT = ARGV[0].to_i()
 
-server = WebSocketServer.new(
-	:accepted_domains => ["*"],
-	:port => PORT
-)
+server = WebSocketServer.new(:accepted_domains => ["*"], :port => PORT)
 
 puts("Hosting Whiteboard server on localhost:#{PORT}")
 
@@ -42,4 +39,5 @@ server.run do |ws|
 		puts('Connection closed by client')
 
 	end
+	
 end
