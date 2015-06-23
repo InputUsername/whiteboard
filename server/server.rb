@@ -13,18 +13,6 @@ server = WebSocketServer.new(
 
 puts("Hosting Whiteboard server on localhost:#{PORT}")
 
-SCREEN_W = 1280;
-SCREEN_H = 720;
-
-screen_data = []
-
-(0..SCREEN_H).each do |y|
-	screen_data << []
-	(0..SCREEN_W).each do |x|
-		screen_data[-1][x] = -1
-	end
-end
-
 clients = []
 
 server.run do |ws|
@@ -40,7 +28,7 @@ server.run do |ws|
 
 			while data = ws.receive()
 				clients.each do |client|
-					client.send(data) unless client == ws
+					client.send(data)
 				end
 			end
 		else
@@ -48,7 +36,9 @@ server.run do |ws|
 		end
 
 	ensure
-
+		
+		clients.delete(ws)
+		
 		puts('Connection closed by client')
 
 	end
