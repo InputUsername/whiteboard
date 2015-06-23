@@ -74,14 +74,17 @@ $connect.addEventListener("click", function() {
             
             var cmd = msg.data;
             
-            if (cmd[0] == "p") {
+            var paintRegex = /p_(\d+)_(\d+)_(\d+)/;
+            var lineRegex = /l_(\d+)_(\d+)_(\d+)_(\d+)_(\d+)/;
+            
+            if (paintRegex.test(cmd)) {
                 
             }
-            else if(cmd[0] == "l") {
+            else if (lineRegex.test(cmd)) {
                 
             }
-            else if (cmd[0] == "c") {
-                clearCanvas();
+            else if (cmd == "c") {
+                
             }
         }
 
