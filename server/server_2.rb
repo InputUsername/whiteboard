@@ -55,7 +55,7 @@ server.run do |ws|
 					clients.each do |client|
 						client.push data
 					end
-				rescue Websocket::Error => e
+				rescue WebSocket::Error => e
 					puts 'Something went wrong:'
 					puts ">> #{e.message}"
 				rescue
