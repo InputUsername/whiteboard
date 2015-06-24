@@ -62,17 +62,16 @@ var paint = function(x, y, isLine) {
 }
 
 var update = function() {
-
     ctx.strokeStyle = "#000000";
     ctx.lineJoin = "round";
     ctx.lineWidth = 3;
 
-    var length = Math.min(drawQueue.length, lineQueue.length);
+    var length = drawQueue.length;
     for (var i = 0; i < length; i++) {
 
         ctx.beginPath();
 
-        if (lineQueue[i] && i) {
+        if (lineQueue[i] && i != 0) {
             ctx.moveTo(drawQueue[i - 1][0], drawQueue[i - 1][1]);
 
             socket.send(
@@ -98,10 +97,6 @@ var update = function() {
         ctx.stroke();
 
     }
-
-    drawQueue = [];
-    lineQueue = [];
-
 }
 
 $canvas.addEventListener("mousedown", function(event) {
@@ -112,7 +107,7 @@ $canvas.addEventListener("mousedown", function(event) {
     mouseX = event.pageX - this.offsetLeft;
     mouseY = event.pageY - this.offsetTop;
 
-    paint(mouseX, mouseY);
+    paint(mouseX, mouseY, false);
     update();
 
 }, false);
@@ -126,6 +121,10 @@ $canvas.addEventListener("mousemove", function(event) {
 
         paint(mouseX, mouseY, true);
         update();
+    }
+    else {
+        if (drawQueue.length != 0) drawQueue = [];
+        if (lineQueue.length != 0) lineQueue = [];
     }
 
 }, false);
@@ -162,9 +161,9 @@ var connect = function() {
             if (paintRegex.test(cmd)) {
                 var data = cmd.split("_");
                 if (data.length == 4) {
-                    var x = data[1];
-                    var y = data[2];
-                    var c = data[3];
+                    var x = parseInt(data[1]);
+                    var y = parseInt(data[2]);
+                    var c = parseInt(data[3]);
 
                     ctx.strokeStyle = "#000000";
                     ctx.lineJoin = "round";
@@ -180,11 +179,11 @@ var connect = function() {
             else if (lineRegex.test(cmd)) {
                 var data = cmd.split("_")
                 if (data.length == 6) {
-                    var x1 = data[1];
-                    var y1 = data[2];
-                    var x2 = data[3];
-                    var y2 = data[4];
-                    var c = data[5];
+                    var x1 = parseInt(data[1]);
+                    var y1 = parseInt(data[2]);
+                    var x2 = parseInt(data[3]);
+                    var y2 = parseInt(data[4]);
+                    var c = parseInt(data[5]);
 
                     ctx.strokeStyle = "#000000";
                     ctx.lineJoin = "round";
@@ -192,7 +191,7 @@ var connect = function() {
 
                     ctx.beginPath();
                     ctx.moveTo(x1, y1);
-                    ctx.lineTo(x, y);
+                    ctx.lineTo(x2, y2);
                     ctx.closePath();
                     ctx.stroke();
                 }
