@@ -9,16 +9,31 @@
 </head>
 <body>
 	<div id="wrapper">
+
 		<div id="connection">
 			<input id="host" type="text" value="localhost" placeholder="Hostname" />
 			<span>:</span>
-			<input id="port" type="text" value="16180" placeholder="Port" />
+			<input id="port" type="number" min="0" max="65536" value="16180" placeholder="Port" />
 			<input id="connect" type="button" value="Connect" />
 		</div>
 
-		<canvas id="canvas"></canvas>
+		<div id="drawArea">
+			<div id="controls">
+				<input id="clear" type="button" value="Clear" />
+				<input id="color" type="color" value="#000000" />
+				<input id="size" type="range" min="1" max="10" value="3" />
+			</div>
 
-		<script src="whiteboard.js"></script>
+			<canvas id="canvas"></canvas>
+
+			<div id="connectionInfo">
+				<p id="usersCount"></p>
+				<input id="disconnect" type="button" value="Disconnect" />
+			</div>
+		</div>
+
 	</div>
+
+	<script src="whiteboard.js"></script>
 </body>
 </html>

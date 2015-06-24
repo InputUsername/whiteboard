@@ -19,24 +19,53 @@ server.run do |ws|
 		puts('Connection accepted')
 
 		if ws.path == '/whiteboard' then
+
 			ws.handshake()
 
 			clients << ws
 
-			while data = ws.receive()
-				clients.each do |client|
-					client.send(data) unless client.object_id() == ws.object_id()
-				end
+			n_clients = clients.size
+
+			clients.each do |client|
+				client.send("u_" + n_clients.to_s)
 			end
+
+			while true
+
+				begin
+
+					data = ws.receive()
+
+					clients.each do |client|
+						client.send(data) unless client.object_id() == ws.object_id()
+					end
+
+				rescue WebSocket::Error => e
+					puts("Something went wrong: #{e.message}")
+				rescue
+					break
+				end
+
+			end
+
 		else
+
 			ws.handshake('404 not found')
+
 		end
 
 	ensure
 
-		clients.delete(ws)
+		clients.reject! {|client| client.object_id() == ws.object_id() }
+
+		n_clients = clients.size
+
+		clients.each do |client|
+			client.send("u_" + n_clients.to_s)
+		end
 
 		puts('Connection closed by client')
+		puts("Active clients: #{n_clients}")
 
 	end
 

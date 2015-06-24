@@ -6,11 +6,36 @@ body {
 #wrapper {
     margin: 0;
     padding: 0;
+
+    text-align: center;
+}
+
+/* Connect area */
+#connection {
+    margin: 20px;
+}
+
+#host {
+    width: 120px;
+}
+
+#port {
+    width: 50px;
+}
+
+/* Draw area */
+#controls {
+    margin: 20px;
 }
 
 #canvas {
-    margin: 0;
-    padding: 0;
-
     border: 2px solid #000000;
+}
+
+#canvas:hover {
+    cursor: default;
+}
+
+#connectionInfo {
+    margin: 20px;
 }

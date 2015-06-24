@@ -4,20 +4,43 @@ var $host = document.getElementById("host");
 var $port = document.getElementById("port");
 var $connect = document.getElementById("connect");
 
+var $drawArea = document.getElementById("drawArea");
+var $clear = document.getElementById("clear");
+var $color = document.getElementById("color");
+var $size = document.getElementById("size");
 var $canvas = document.getElementById("canvas");
+var $usersCount = document.getElementById("usersCount");
+var $disconnect = document.getElementById("disconnect");
 
-var showInterface = function(showCanvas) {
-    if (showCanvas == false) {
-        $canvas.style.display = "none";
+var showInterface = function(showDrawArea) {
+    if (showDrawArea == false) {
+        $drawArea.style.display = "none";
         $connection.style.display = "block";
     }
     else {
-        $canvas.style.display = "inline-block";
+        $drawArea.style.display = "block";
         $connection.style.display = "none";
     }
 };
 
 showInterface(false);
+
+var getColor = function() {
+    return $color.value;
+}
+
+$clear.addEventListener("click", function() {
+    clearCanvas();
+    socket.send("c");
+}, false);
+
+var getSize = function() {
+    return parseInt($size.value);
+}
+
+$disconnect.addEventListener("click", function() {
+    reset();
+}, false);
 
 // Connection stuff
 var makeUrl = function(host, port) {
@@ -62,9 +85,9 @@ var paint = function(x, y, isLine) {
 }
 
 var update = function() {
-    ctx.strokeStyle = "#000000";
+    ctx.strokeStyle = getColor();
     ctx.lineJoin = "round";
-    ctx.lineWidth = 3;
+    ctx.lineWidth = getSize();
 
     var length = drawQueue.length;
     for (var i = 0; i < length; i++) {
@@ -83,13 +106,25 @@ var update = function() {
                 drawQueue[i][0]
                 + "_" +
                 drawQueue[i][1]
-                + "_0"
+                + "_" +
+                getColor()
+                + "_" +
+                getSize()
             );
         }
         else {
             ctx.moveTo(drawQueue[i][0] - 1, drawQueue[i][1]);
 
-            socket.send("p_" + drawQueue[i][0] + "_" + drawQueue[i][1] + "_0");
+            socket.send(
+                "p_" +
+                drawQueue[i][0]
+                + "_" +
+                drawQueue[i][1]
+                + "_" +
+                getColor()
+                + "_" +
+                getSize()
+            );
         }
 
         ctx.lineTo(drawQueue[i][0], drawQueue[i][1]);
@@ -100,6 +135,11 @@ var update = function() {
 }
 
 $canvas.addEventListener("mousedown", function(event) {
+
+    if (event.buttons == 2) {
+        event.preventDefault();
+        return;
+    }
 
     painting = true;
 
@@ -155,19 +195,21 @@ var connect = function() {
         socket.onmessage = function(msg) {
             var cmd = msg.data;
 
-            var paintRegex = /p_\d+_\d+_\d+/g;
-            var lineRegex = /l_\d+_\d+_\d+_\d+_\d+/g;
+            var paintRegex = /p_\d+_\d+_\#[0-9a-fA-F]+_\d+/;
+            var lineRegex = /l_\d+_\d+_\d+_\d+_\#[0-9a-fA-F]+_\d+/;
+            var usersRegex = /u_\d+/;
 
             if (paintRegex.test(cmd)) {
                 var data = cmd.split("_");
-                if (data.length == 4) {
+                if (data.length == 5) {
                     var x = parseInt(data[1]);
                     var y = parseInt(data[2]);
-                    var c = parseInt(data[3]);
+                    var c = String(data[3]);
+                    var s = parseInt(data[4]);
 
-                    ctx.strokeStyle = "#000000";
+                    ctx.strokeStyle = c;
                     ctx.lineJoin = "round";
-                    ctx.lineWidth = 3;
+                    ctx.lineWidth = s;
 
                     ctx.beginPath();
                     ctx.moveTo(x - 1, y);
@@ -178,16 +220,17 @@ var connect = function() {
             }
             else if (lineRegex.test(cmd)) {
                 var data = cmd.split("_")
-                if (data.length == 6) {
+                if (data.length == 7) {
                     var x1 = parseInt(data[1]);
                     var y1 = parseInt(data[2]);
                     var x2 = parseInt(data[3]);
                     var y2 = parseInt(data[4]);
-                    var c = parseInt(data[5]);
+                    var c = String(data[5]);
+                    var s = parseInt(data[5]);
 
-                    ctx.strokeStyle = "#000000";
+                    ctx.strokeStyle = c;
                     ctx.lineJoin = "round";
-                    ctx.lineWidth = 3;
+                    ctx.lineWidth = s;
 
                     ctx.beginPath();
                     ctx.moveTo(x1, y1);
@@ -199,13 +242,20 @@ var connect = function() {
             else if (cmd == "c") {
                 clearCanvas();
             }
+            else if (usersRegex.test(cmd)) {
+                var data = cmd.split("_");
+                if (data.length == 2) {
+                    var u = data[1];
+                    $usersCount.innerHTML = "Connected: " + u;
+                }
+            }
         }
 
         socket.onerror = function(error) {
             console.log("error:");
             console.log(error);
 
-            alert("error");
+            alert("Error: can't connect to " + url);
         }
 
         socket.onclose = function() {
@@ -228,7 +278,10 @@ $connect.addEventListener("click", connect, false);
 var reset = function() {
     clearCanvas();
     showInterface(false);
-    socket = null;
+    if (socket != null) {
+        socket.close();
+        socket = null;
+    }
 
     drawQueue = [];
     lineQueue = [];
