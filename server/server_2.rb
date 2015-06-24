@@ -1,5 +1,24 @@
 require_relative 'web_socket.rb'
 
+# Class wrapping a WebSocket client
+class Client
+	attr_reader :ws, :queue, :thread
+
+	def initialize(ws, queue, thread)
+		@ws = ws
+		@queue = queue
+		@thread = thread
+	end
+
+	def ==(other)
+		other.ws.object_id == ws.object_id
+	end
+
+	def msg(data)
+		queue.push(data)
+	end
+end
+
 if ARGV.size < 1 then
 	abort "Usage: #{__FILE__} <port>"
 end
@@ -25,18 +44,12 @@ server.run do |ws|
 			# Perform handshake
 			ws.handshake
 
+			puts 'Handshake completed'
+
 			# Create queue
 			# Used to synchronise between the main Thread
 			# and client threads
 			queue = Queue.new
-			clients << queue
-
-			# Send user count to all clients' queues
-			n_clients = clients.size
-			clients.each do |client|
-				client.push("u_#{n_clients.to_s}")
-			end
-			puts "Active clients: #{n_clients}"
 
 			# Create a Thread that will send messages
 			# to the client
@@ -44,8 +57,18 @@ server.run do |ws|
 				while true do
 					message = queue.pop
 					ws.send message
+					puts "Sent #{message}"
 				end
 			end
+
+			current_client = Client.new(ws, queue, thread)
+
+			# Send user count to all clients' queues
+			n_clients = clients.size
+			clients.each do |client|
+				client.msg "u_#{n_clients}"
+			end
+			puts "Active clients: #{n_clients}"
 
 			# Main receive loop
 			while true do
@@ -67,13 +90,17 @@ server.run do |ws|
 		end
 	ensure
 		puts 'Connection closed by client'
-		clients.delete queue
-		thread.terminate if thread
 
+		# Send user count to all clients' queues
 		n_clients = clients.size
 		clients.each do |client|
-			client.push("u_#{n_clients.to_s}")
+			puts "#{client}: #{client.size}"
+			client << "u_#{n_clients}"
+			puts "#{client}: #{client.size}"
 		end
 		puts "Active clients: #{n_clients}"
+
+		clients.delete queue
+		thread.terminate if thread
 	end
 end
