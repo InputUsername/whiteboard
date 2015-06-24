@@ -56,9 +56,9 @@ var painting = false;
 var drawQueue = [];
 var lineQueue = [];
 
-var paint = function(x, y, line) {
+var paint = function(x, y, isLine) {
     drawQueue.push([x, y]);
-    lineQueue.push(line);
+    lineQueue.push(isLine);
 }
 
 var update = function() {
@@ -112,7 +112,7 @@ $canvas.addEventListener("mousedown", function(event) {
     mouseX = event.pageX - this.offsetLeft;
     mouseY = event.pageY - this.offsetTop;
 
-    paint(mouseX, mouseY, false);
+    paint(mouseX, mouseY);
     update();
 
 }, false);
@@ -137,7 +137,7 @@ $canvas.addEventListener("mouseup", function(event) {
 }, false);
 
 // Connection stuff
-$connect.addEventListener("click", function() {
+var connect = function() {
 
     var host = $host.value;
     var port = $port.value;
@@ -156,15 +156,15 @@ $connect.addEventListener("click", function() {
         socket.onmessage = function(msg) {
             var cmd = msg.data;
 
-            var paintRegex = /p_(\d+)_(\d+)_(\d+)/g;
-            var lineRegex = /l_(\d+)_(\d+)_(\d+)_(\d+)_(\d+)/g;
+            var paintRegex = /p_\d+_\d+_\d+/g;
+            var lineRegex = /l_\d+_\d+_\d+_\d+_\d+/g;
 
             if (paintRegex.test(cmd)) {
-                var data = cmd.match(paintRegex);
-                if (data.length == 3) {
-                    var x = data[0];
-                    var y = data[1];
-                    var c = data[2];
+                var data = cmd.split("_");
+                if (data.length == 4) {
+                    var x = data[1];
+                    var y = data[2];
+                    var c = data[3];
 
                     ctx.strokeStyle = "#000000";
                     ctx.lineJoin = "round";
@@ -178,15 +178,13 @@ $connect.addEventListener("click", function() {
                 }
             }
             else if (lineRegex.test(cmd)) {
-                alert('line');
-
-                var data = cmd.match(paintRegex);
-                if (data.length == 5) {
-                    var x1 = data[0];
-                    var y1 = data[1];
-                    var x2 = data[2];
-                    var y2 = data[3];
-                    var c = data[4];
+                var data = cmd.split("_")
+                if (data.length == 6) {
+                    var x1 = data[1];
+                    var y1 = data[2];
+                    var x2 = data[3];
+                    var y2 = data[4];
+                    var c = data[5];
 
                     ctx.strokeStyle = "#000000";
                     ctx.lineJoin = "round";
@@ -207,6 +205,8 @@ $connect.addEventListener("click", function() {
         socket.onerror = function(error) {
             console.log("error:");
             console.log(error);
+
+            alert("error");
         }
 
         socket.onclose = function() {
@@ -221,7 +221,9 @@ $connect.addEventListener("click", function() {
         reset();
     }
 
-}, false);
+};
+
+$connect.addEventListener("click", connect, false);
 
 // General stuff
 var reset = function() {
