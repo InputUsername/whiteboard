@@ -4,18 +4,31 @@ require_relative 'web_socket.rb'
 class Client
 	attr_reader :ws, :queue, :thread
 
-	def initialize(ws, queue, thread)
+	def initialize(ws)
 		@ws = ws
-		@queue = queue
-		@thread = thread
+		@queue = Queue.new
+		@thread = Thread.new do
+			while true
+				data = queue.pop
+				ws.send data
+			end
+		end
+	end
+
+	def finish
+		thread.terminate if thread
 	end
 
 	def ==(other)
-		other.ws.object_id == ws.object_id
+		other.is_a?(Client) and other.ws.object_id == ws.object_id
 	end
 
 	def msg(data)
-		queue.push(data)
+		queue.push data
+	end
+
+	def direct(data)
+		ws.send data
 	end
 end
 
@@ -46,22 +59,8 @@ server.run do |ws|
 
 			puts 'Handshake completed'
 
-			# Create queue
-			# Used to synchronise between the main Thread
-			# and client threads
-			queue = Queue.new
-
-			# Create a Thread that will send messages
-			# to the client
-			thread = Thread.new do
-				while true do
-					message = queue.pop
-					ws.send message
-					puts "Sent #{message}"
-				end
-			end
-
-			current_client = Client.new(ws, queue, thread)
+			current_client = Client.new ws
+			clients << current_client
 
 			# Send user count to all clients' queues
 			n_clients = clients.size
@@ -73,10 +72,10 @@ server.run do |ws|
 			# Main receive loop
 			while true do
 				begin
-					# Receive data and push it to all clients' queues
+					# Receive data and push send it to all clients
 					data = ws.receive
 					clients.each do |client|
-						client.push data
+						client.msg data unless client == current_client
 					end
 				rescue WebSocket::Error => e
 					puts 'Something went wrong:'
@@ -91,16 +90,14 @@ server.run do |ws|
 	ensure
 		puts 'Connection closed by client'
 
+		current_client.finish
+		clients.delete current_client
+
 		# Send user count to all clients' queues
 		n_clients = clients.size
 		clients.each do |client|
-			puts "#{client}: #{client.size}"
-			client << "u_#{n_clients}"
-			puts "#{client}: #{client.size}"
+			client.direct "u_#{n_clients}"
 		end
 		puts "Active clients: #{n_clients}"
-
-		clients.delete queue
-		thread.terminate if thread
 	end
 end
