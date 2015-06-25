@@ -246,7 +246,7 @@ var connect = function() {
                 var data = cmd.split("_");
                 if (data.length == 2) {
                     var u = data[1];
-                    $usersCount.innerHTML = "Connected: " + u;
+                    $usersCount.innerHTML = "Active users: " + u;
                 }
             }
         }
