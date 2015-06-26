@@ -1,6 +1,14 @@
 body {
+    font-family: "Roboto", "Segoe UI", "Helvetica", "Verdana", "Arial", sans-serif;
+    font-size: 18px;
+    
     margin: 0;
     padding: 0;
+}
+
+input {
+    font-family: "Roboto", "Segoe UI", "Helvetica", "Verdana", "Arial", sans-serif;
+    font-size: 18px;
 }
 
 #wrapper {
