@@ -2,7 +2,9 @@ A simple client/server whiteboard app using WebSockets.
 Run the server, connect through your browser.
 
 Server usage:
-  ruby server/server.rb <port>
+  ruby server/server_2.rb <port>
+
+(You can use the old server, which supports fewer features: ruby server/server.rb <port>)
 
 Client usage:
   open index.html in your browser, type the address and port and click connect
