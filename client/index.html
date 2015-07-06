@@ -10,17 +10,27 @@
 <body>
 	<div id="wrapper">
 
-		<div id="connection">
+		<h1 id="title">Whiteboard</h1>
+
+		<div id="aboutArea">
+			<p>Whiteboard is a simple whiteboard application, which allows you
+			to draw stuff together with other people on a whiteboard.</p>
+
+			<p>You can find the source code and instructions to use it on
+			<a href="https://github.com/InputUsername/Whiteboard">GitHub</a>.</p>
+		</div>
+
+		<div id="connectArea">
 			<input id="host" type="text" value="localhost" placeholder="Hostname" />
 			<span>:</span>
 			<input id="port" type="number" min="0" max="65536" value="16180" placeholder="Port" />
-			<input id="connect" type="button" value="Connect" />
+			<input id="connect" class="button" type="button" value="Connect" />
 		</div>
 
 		<div id="drawArea">
 			<div id="controls">
-				<input id="clear" type="button" value="Clear" />
-				<input id="color" type="color" value="#000000" />
+				<input id="clear" class="button" type="button" value="Clear" />
+				<input id="color" class="button" type="color" value="#000000" />
 				<input id="size" type="range" min="1" max="10" value="3" />
 			</div>
 
@@ -28,7 +38,7 @@
 
 			<div id="connectionInfo">
 				<p id="usersCount"></p>
-				<input id="disconnect" type="button" value="Disconnect" />
+				<input id="disconnect" class="button" type="button" value="Disconnect" />
 			</div>
 		</div>
 

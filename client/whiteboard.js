@@ -1,5 +1,7 @@
 // Select elements
-var $connection = document.getElementById("connection");
+var $aboutArea = document.getElementById("aboutArea")
+
+var $connectArea = document.getElementById("connectArea");
 var $host = document.getElementById("host");
 var $port = document.getElementById("port");
 var $connect = document.getElementById("connect");
@@ -14,12 +16,14 @@ var $disconnect = document.getElementById("disconnect");
 
 var showInterface = function(showDrawArea) {
     if (showDrawArea == false) {
+        $aboutArea.style.display = "block";
+        $connectArea.style.display = "block";
         $drawArea.style.display = "none";
-        $connection.style.display = "block";
     }
     else {
+        $aboutArea.style.display = "none";
+        $connectArea.style.display = "none";
         $drawArea.style.display = "block";
-        $connection.style.display = "none";
     }
 };
 

@@ -1,7 +1,7 @@
 body {
     font-family: "Roboto", "Segoe UI", "Helvetica", "Verdana", "Arial", sans-serif;
     font-size: 18px;
-    
+
     margin: 0;
     padding: 0;
 }
@@ -11,6 +11,21 @@ input {
     font-size: 18px;
 }
 
+.button {
+    outline: none;
+    border: 2px solid #000000;
+
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.button:hover, .button:active {
+    background-color: #000000;
+    color: #ffffff;
+
+    cursor: pointer;
+}
+
 #wrapper {
     margin: 0;
     padding: 0;
@@ -18,17 +33,32 @@ input {
     text-align: center;
 }
 
+/* About area */
+#aboutArea {
+    width: 50%;
+
+    margin: 0 auto 60px auto;
+
+    border-bottom: 2px solid #000000;
+}
+
 /* Connect area */
-#connection {
+#connectArea {
     margin: 20px;
 }
 
+#host, #port {
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #000000;
+}
+
 #host {
-    width: 120px;
+    width: 150px;
 }
 
 #port {
-    width: 50px;
+    width: 80px;
 }
 
 /* Draw area */
