@@ -41,7 +41,7 @@ PORT = ARGV[0].to_i
 # Create server
 server = WebSocketServer.new(:accepted_domains => ['*'], :port => PORT)
 
-puts "Hosting Whiteboard server on localhost:#{PORT}"
+puts "Hosting Whiteboard server on localhost:#{PORT}", "\n"
 
 clients = []
 
@@ -67,7 +67,7 @@ server.run do |ws|
 			clients.each do |client|
 				client.msg "u_#{n_clients}"
 			end
-			puts "Active clients: #{n_clients}"
+			puts "Active clients: #{n_clients}", "\n"
 
 			# Main receive loop
 			while true do
@@ -79,7 +79,7 @@ server.run do |ws|
 					end
 				rescue WebSocket::Error => e
 					puts 'Something went wrong:'
-					puts ">> #{e.message}"
+					puts ">> #{e.message}", "\n"
 				rescue
 					break
 				end
@@ -98,6 +98,6 @@ server.run do |ws|
 		clients.each do |client|
 			client.direct "u_#{n_clients}"
 		end
-		puts "Active clients: #{n_clients}"
+		puts "Active clients: #{n_clients}", "\n"
 	end
 end
