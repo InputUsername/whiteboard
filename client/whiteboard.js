@@ -7,6 +7,7 @@ var $port = document.getElementById("port");
 var $connect = document.getElementById("connect");
 
 var $drawArea = document.getElementById("drawArea");
+var $save = document.getElementById("save");
 var $clear = document.getElementById("clear");
 var $color = document.getElementById("color");
 var $size = document.getElementById("size");
@@ -32,6 +33,11 @@ showInterface(false);
 var getColor = function() {
     return $color.value;
 }
+
+$save.addEventListener("click", function() {
+    var dataUrl = $canvas.toDataURL();
+    window.open(dataUrl, "_blank");
+})
 
 $clear.addEventListener("click", function() {
     clearCanvas();
