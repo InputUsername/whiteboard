@@ -33,6 +33,13 @@ input {
     text-align: center;
 }
 
+#title {
+    font-size: 1.5em;
+
+    margin: 0;
+    margin-top: 10px;
+}
+
 /* About area */
 #aboutArea {
     width: 50%;
@@ -44,7 +51,7 @@ input {
 
 /* Connect area */
 #connectArea {
-    margin: 20px;
+    margin: 10px;
 }
 
 #host, #port {
@@ -63,7 +70,7 @@ input {
 
 /* Draw area */
 #controls {
-    margin: 20px;
+    margin: 10px;
 }
 
 #canvas {
@@ -72,8 +79,4 @@ input {
 
 #canvas:hover {
     cursor: default;
-}
-
-#connectionInfo {
-    margin: 20px;
 }
