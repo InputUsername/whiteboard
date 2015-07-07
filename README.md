@@ -4,14 +4,14 @@ Run the server, connect through your browser.
 
 ## Server usage
 1. Download the server (server_2.rb) and put it somewhere on your computer.
-2. Download the Ruby WebSocket library from here:
-    - https://github.com/gimite/web-socket-ruby
-    - Put it in the same folder as the server file.
-3. Run the following command on your command line of choice:
+2. Download the Ruby WebSocket library from [here](https://github.com/gimite/web-socket-ruby)
+3. Put it in the same folder as the server file.
+4. Run the following command on your command line of choice:
     `ruby server_2.rb <port>`
-4. To stop the server, use Ctrl+C or exit the command line.
+5. To stop the server, use Ctrl+C or exit the command line.
 
 You can use the old server, which supports fewer features (not recommended):
+
 `ruby server.rb <port>`
 
 ## Client usage
