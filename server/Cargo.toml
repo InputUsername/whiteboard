@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 tokio = { version = "0.2", features = ["full"] }
-tungstenite = "0.10.0"
+tungstenite = "0.10.1"
 tokio-tungstenite = "*"
 futures = "0.3"
 dashmap = "3.4.0"
