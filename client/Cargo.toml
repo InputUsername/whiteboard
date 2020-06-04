@@ -10,7 +10,7 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-yew = "0.15"
+yew = "0.16"
 wasm-bindgen = "0.2"
 web-sys = "*"
 console_error_panic_hook = "*"
