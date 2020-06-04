@@ -12,5 +12,11 @@ crate-type = ["cdylib"]
 [dependencies]
 yew = "0.16"
 wasm-bindgen = "0.2"
-web-sys = "*"
 console_error_panic_hook = "*"
+
+[dependencies.web-sys]
+version = "*"
+features = [
+    "HtmlCanvasElement",
+    "CanvasRenderingContext2d",
+]
