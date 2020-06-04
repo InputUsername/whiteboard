@@ -1,0 +1,9 @@
+html, body {
+    font-family: monospace;
+    font-weight: normal;
+    font-size: 14pt;
+}
+
+#draw-canvas {
+    border: 1px solid #000;
+}

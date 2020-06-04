@@ -1,6 +1,8 @@
 mod connect;
+mod draw;
 
 use connect::ConnectArea;
+use draw::DrawArea;
 
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
@@ -99,9 +101,12 @@ impl Component for Model {
 
     fn view(&self) -> Html {
         html! {
-            <ConnectArea connected={ self.ws.is_some() }
-                on_connect=self.link.callback(|addr| Msg::Connect(addr))
-                on_disconnect=self.link.callback(|_| Msg::Disconnect) />
+            <>
+                <ConnectArea connected={ self.ws.is_some() }
+                    on_connect=self.link.callback(|addr| Msg::Connect(addr))
+                    on_disconnect=self.link.callback(|_| Msg::Disconnect) />
+                <DrawArea />
+            </>
         }
     }
 }
