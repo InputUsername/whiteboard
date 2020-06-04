@@ -1,9 +1,12 @@
+mod connect;
+
+use connect::ConnectArea;
+
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
 use yew::services::websocket::{WebSocketService, WebSocketTask, WebSocketStatus};
 use yew::format::{Text, Binary};
 
-use std::panic;
 use std::convert::From;
 
 struct Model {
@@ -13,7 +16,8 @@ struct Model {
 }
 
 enum Msg {
-    Connect,
+    Connect(String),
+    Disconnect,
     WsMsg,
     WsOpened,
     WsClosed,
@@ -45,7 +49,7 @@ impl Component for Model {
     type Message = Msg;
     type Properties = ();
 
-    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
+    fn create(_props: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
             link,
             ws_service: WebSocketService::new(),
@@ -55,9 +59,7 @@ impl Component for Model {
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::Connect => {
-                alert("Clicked connect");
-
+            Msg::Connect(addr) => {
                 let callback = self.link.callback(|_data: IgnoreData| Msg::WsMsg);
                 let notification = self.link.callback(|status| match status {
                     WebSocketStatus::Opened => Msg::WsOpened,
@@ -66,11 +68,12 @@ impl Component for Model {
                 });
                 let task = self
                     .ws_service
-                    .connect("ws://localhost:8080", callback, notification)
+                    .connect(&format!("ws://{}", addr), callback, notification)
                     .unwrap();
                 self.ws = Some(task);
             }
-            Msg::WsMsg => return false,
+            Msg::Disconnect => self.ws = None,
+            Msg::WsMsg => alert("Message received"),
             Msg::WsOpened => alert("Opened"),
             Msg::WsClosed => {
                 alert("Closed");
@@ -90,16 +93,16 @@ impl Component for Model {
 
     fn view(&self) -> Html {
         html! {
-            <div>
-                <button onclick=self.link.callback(|_| Msg::Connect)>{ "Connect" }</button>
-            </div>
+            <ConnectArea connected={ self.ws.is_some() }
+                on_connect=self.link.callback(|addr| Msg::Connect(addr))
+                on_disconnect=self.link.callback(|_| Msg::Disconnect) />
         }
     }
 }
 
 #[wasm_bindgen(start)]
 pub fn run_app() {
-    panic::set_hook(Box::new(console_error_panic_hook::hook));
+    console_error_panic_hook::set_once();
 
     App::<Model>::new().mount_to_body();
 }
