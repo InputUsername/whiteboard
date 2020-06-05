@@ -100,12 +100,22 @@ impl Component for Model {
     }
 
     fn view(&self) -> Html {
+        let connected = self.ws.is_some();
+        let draw_area_if_connected = || -> Html {
+            if connected {
+                html! {
+                    <DrawArea width=1600f64 height=900f64 />
+                }
+            } else {
+                html! {}
+            }
+        };
         html! {
             <>
-                <ConnectArea connected={ self.ws.is_some() }
+                <ConnectArea connected=connected
                     on_connect=self.link.callback(|addr| Msg::Connect(addr))
                     on_disconnect=self.link.callback(|_| Msg::Disconnect) />
-                <DrawArea />
+                { draw_area_if_connected() }
             </>
         }
     }
