@@ -52,7 +52,7 @@ impl Component for ConnectArea {
         if self.props.connected {
             html! {
                 <div>
-                    <span>{ "Connected to" } { &self.address }</span>
+                    <span>{ "Connected to " } { &self.address }</span>
                     <button onclick=self.link.callback(|_| Msg::Disconnect)>{ "Disconnect" }</button>
                 </div>
             }
