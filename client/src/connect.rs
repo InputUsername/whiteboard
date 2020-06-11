@@ -3,9 +3,7 @@ use yew::prelude::*;
 pub struct ConnectArea {
     link: ComponentLink<Self>,
     address: String,
-    connected: bool,
-    on_connect: Callback<String>,
-    on_disconnect: Callback<()>,
+    props: Props,
 }
 
 pub enum Msg {
@@ -28,32 +26,30 @@ impl Component for ConnectArea {
     fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
             link,
-            connected: props.connected,
             address: String::new(),
-            on_connect: props.on_connect,
-            on_disconnect: props.on_disconnect,
+            props,
         }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::Connect => self.on_connect.emit(self.address.clone()),
-            Msg::Disconnect => self.on_disconnect.emit(()),
+            Msg::Connect => self.props.on_connect.emit(self.address.clone()),
+            Msg::Disconnect => self.props.on_disconnect.emit(()),
             Msg::UpdateAddress(addr) => self.address.clone_from(&addr),
         }
         true
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        if props.connected != self.connected {
-            self.connected = props.connected;
+        if props != self.props {
+            self.props = props;
             return true;
         }
         false
     }
 
     fn view(&self) -> Html {
-        if self.connected {
+        if self.props.connected {
             html! {
                 <div>
                     <span>{ "Connected to" } { &self.address }</span>
