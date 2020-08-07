@@ -21,6 +21,7 @@ pub enum Msg {
     MouseDown { x: i32, y: i32 },
     MouseMove { x: i32, y: i32 },
     MouseUp { x: i32, y: i32 },
+    ClearCanvas,
 }
 
 #[derive(Clone, PartialEq, Properties)]
@@ -84,6 +85,7 @@ impl Component for DrawArea {
                     self.y = 0;
                 }
             }
+            Msg::ClearCanvas => self.clear_canvas()
         }
         false
     }
@@ -100,16 +102,22 @@ impl Component for DrawArea {
         let mousedown = self.link.callback(|e: MouseEvent| Msg::MouseDown { x: e.offset_x(), y: e.offset_y() });
         let mousemove = self.link.callback(|e: MouseEvent| Msg::MouseMove { x: e.offset_x(), y: e.offset_y() });
         let mouseup = self.link.callback(|e: MouseEvent| Msg::MouseUp { x: e.offset_x(), y: e.offset_y() });
+        let clear = self.link.callback(|_| Msg::ClearCanvas);
         html! {
-            <canvas ref={self.node_ref.clone()}
-                id="draw-canvas"
-                width=self.props.width
-                height=self.props.height
-                onmousedown=mousedown
-                onmousemove=mousemove
-                onmouseup=mouseup>
-                { NO_CANVAS }
-            </canvas>
+            <div id="draw-area">
+                <input type="button"
+                    value="Clear"
+                    onclick=clear />
+                <canvas ref={self.node_ref.clone()}
+                    id="draw-canvas"
+                    width=self.props.width
+                    height=self.props.height
+                    onmousedown=mousedown
+                    onmousemove=mousemove
+                    onmouseup=mouseup>
+                    { NO_CANVAS }
+                </canvas>
+            </div>
         }
     }
 }
