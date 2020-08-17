@@ -105,9 +105,11 @@ impl Component for DrawArea {
         let clear = self.link.callback(|_| Msg::ClearCanvas);
         html! {
             <div id="draw-area">
-                <input type="button"
-                    value="Clear"
-                    onclick=clear />
+                <div>
+                    <input type="button"
+                        value="Clear"
+                        onclick=clear />
+                </div>
                 <canvas ref={self.node_ref.clone()}
                     id="draw-canvas"
                     width=self.props.width
