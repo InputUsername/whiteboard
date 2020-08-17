@@ -13,7 +13,6 @@ use std::convert::From;
 
 struct Model {
     link: ComponentLink<Self>,
-    ws_service: WebSocketService,
     ws: Option<WebSocketTask>,
 }
 
@@ -58,7 +57,6 @@ impl Component for Model {
     fn create(_props: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
             link,
-            ws_service: WebSocketService::new(),
             ws: None,
         }
     }
@@ -72,9 +70,7 @@ impl Component for Model {
                     WebSocketStatus::Closed => Msg::WsUpdate(WsUpdate::Closed),
                     WebSocketStatus::Error => Msg::WsUpdate(WsUpdate::Error),
                 });
-                let task = self
-                    .ws_service
-                    .connect(&format!("ws://{}", addr), callback, notification)
+                let task = WebSocketService::connect_binary(&format!("ws://{}", addr), callback, notification)
                     .unwrap();
                 self.ws = Some(task);
             }
